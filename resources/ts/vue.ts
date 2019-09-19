@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import ExampleComponent from "./components/ExampleComponent.vue";
+import router from './vue-router';
 
 new Vue({
     el: '#app',
-    components: {ExampleComponent}
-})
+    router,
+});
