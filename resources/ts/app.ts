@@ -1,4 +1,2 @@
 import './bootstrap';
-
-const a: string = 'hello';
-console.log(a);
+import './vue';
