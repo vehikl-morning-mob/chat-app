@@ -1,0 +1,10 @@
+{
+    "transform": {
+        "vue$": "vue-jest",
+        "ts$": "ts-jest"
+    },
+    "testPathIgnorePatterns": [
+        "/node_modules/",
+        "/vendor/"
+    ]
+}

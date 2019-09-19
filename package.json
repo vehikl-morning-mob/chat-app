@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "test": "jest --config jest.config.json",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -10,15 +11,23 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@babel/core": "^7.6.0",
+        "@types/jest": "^24.0.18",
+        "@vue/test-utils": "^1.0.0-beta.29",
         "axios": "^0.19",
+        "babel-core": "^7.0.0-bridge.0",
         "cross-env": "^5.1",
+        "jest": "^24.9.0",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
+        "ts-jest": "^24.1.0",
         "ts-loader": "^6.1.0",
+        "typescript": "^3.6.3",
         "vue": "^2.6.10",
+        "vue-jest": "^3.0.5",
         "vue-property-decorator": "^8.2.2",
         "vue-template-compiler": "^2.6.10"
     }
