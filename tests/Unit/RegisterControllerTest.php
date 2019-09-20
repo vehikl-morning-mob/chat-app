@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\User;
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,5 +22,22 @@ class RegisterControllerTest extends TestCase
         $this->postJson('/register', $user)->assertSuccessful();
 
         $this->assertNotEmpty(User::query()->where('email', $user['email']));
+    }
+
+    public function testItDoesNotAllowAUserToRegisterWithAnExistingEmail()
+    {
+        $user = [
+            'name' => 'testName',
+            'email' => 'foo@bar.com',
+            'password' => 'fakePassword',
+        ];
+
+        factory(User::class)->create(['email' => $user['email']]);
+
+        $this
+            ->postJson('/register', $user)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $this->assertEquals(1, User::query()->where('email', $user['email'])->count());
     }
 }
