@@ -40,4 +40,19 @@ class RegisterControllerTest extends TestCase
 
         $this->assertEquals(1, User::query()->where('email', $user['email'])->count());
     }
+
+    public function testItAuthenticatesTheUserUponRegistration()
+    {
+        $user = [
+            'name' => 'testName',
+            'email' => 'foo@bar.com',
+            'password' => 'fakePassword',
+        ];
+
+        $this
+            ->postJson('/register', $user)
+            ->assertSuccessful();
+
+        $this->assertAuthenticatedAs(User::query()->where('email', $user['email'])->first());
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -13,6 +14,9 @@ class RegisterController extends Controller
 
     protected function create(StoreUserRequest $request): User
     {
-        return User::create($request->validated());
+        $user = User::create($request->validated());
+        Auth::login($user);
+
+        return $user;
     }
 }
