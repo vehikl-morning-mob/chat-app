@@ -74,4 +74,42 @@ class RegisterControllerTest extends TestCase
         $this->assertTrue(Hash::check($user['password'],
             User::query()->where('email', $user['email'])->first()->password));
     }
+
+    /**
+     * @dataProvider providesInvalidUserPayloads
+     * @param $invalidPayload
+     * @param $invalidAttributeName
+     */
+    public function testItDoesNotRegisterUsersWithInvalidInfo($invalidPayload, $invalidAttributeName)
+    {
+        $this->postJson('/register', $invalidPayload)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure([
+                'errors' => [$invalidAttributeName],
+            ]);
+    }
+
+    public function providesInvalidUserPayloads()
+    {
+        $validEmail = 'proper@email.com';
+        $validPassword = 'password413!';
+        $validName = 'Foobar Buzzfizz';
+        return [
+            'Invalid name' => [
+                [
+                    'name' => '',
+                    'email' => $validEmail,
+                    'password' => $validPassword,
+                ],
+                'name',
+            ],
+            'Missing Email' => [
+                [
+                    'name' => $validName,
+                    'password' => $validPassword,
+                ],
+                'email',
+            ],
+        ];
+    }
 }
