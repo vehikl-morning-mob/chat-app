@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -54,5 +55,20 @@ class RegisterControllerTest extends TestCase
             ->assertSuccessful();
 
         $this->assertAuthenticatedAs(User::query()->where('email', $user['email'])->first());
+    }
+
+    public function testItHashesUsersPasswordUponRegistration()
+    {
+        $user = [
+            'name' => 'testName',
+            'email' => 'foo@bar.com',
+            'password' => 'fakePassword',
+        ];
+        
+        $this
+            ->postJson('/register', $user)
+            ->assertSuccessful();
+        $this->assertTrue(Hash::check($user['password'],
+            User::query()->where('email', $user['email'])->first()->password));
     }
 }
