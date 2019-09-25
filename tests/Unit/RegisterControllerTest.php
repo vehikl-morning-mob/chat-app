@@ -21,7 +21,7 @@ class RegisterControllerTest extends TestCase
 
         $this->postJson('/register', $user)->assertSuccessful();
 
-        $this->assertNotEmpty(User::query()->where('email', $user['email']));
+        $this->assertNotEmpty(User::query()->where('email', $user['email'])->get());
     }
 
     public function testItDoesNotAllowAUserToRegisterWithAnExistingEmail()
