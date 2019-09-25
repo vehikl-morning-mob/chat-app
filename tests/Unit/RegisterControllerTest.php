@@ -44,17 +44,20 @@ class RegisterControllerTest extends TestCase
 
     public function testItAuthenticatesTheUserUponRegistration()
     {
-        $user = [
+        $registrationPayload = [
             'name' => 'testName',
             'email' => 'foo@bar.com',
             'password' => 'fakePassword',
         ];
 
         $this
-            ->postJson('/register', $user)
+            ->postJson('/register', $registrationPayload)
             ->assertSuccessful();
 
-        $this->assertAuthenticatedAs(User::query()->where('email', $user['email'])->first());
+        /** @var $user User */
+        $user = User::query()->where('email', $registrationPayload['email'])->first();
+
+        $this->assertAuthenticatedAs($user);
     }
 
     public function testItHashesUsersPasswordUponRegistration()
@@ -64,7 +67,7 @@ class RegisterControllerTest extends TestCase
             'email' => 'foo@bar.com',
             'password' => 'fakePassword',
         ];
-        
+
         $this
             ->postJson('/register', $user)
             ->assertSuccessful();
