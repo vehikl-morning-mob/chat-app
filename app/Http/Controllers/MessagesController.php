@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\StoreMessageRequest;
 
 class MessagesController extends Controller
 {
@@ -20,10 +21,10 @@ class MessagesController extends Controller
             200);
     }
 
-    public function store(Request $request): Response
+    public function store(StoreMessageRequest $request): Response
     {
-        $request->user()->messages()->create(['content' => $request->input('message')]);
+        $newMessage = $request->user()->messages()->create($request->validated());
 
-        return response(["message" => $request->input('message')], 201);
+        return response(["message" => $newMessage->content], 201);
     }
 }

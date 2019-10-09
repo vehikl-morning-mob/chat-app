@@ -40,7 +40,17 @@ class MessagesControllerTest extends TestCase
 
         $message = 'a message';
         $this->actingAs($user)
-            ->postJson(route('messages.store'), ['message' => $message])
+            ->postJson(route('messages.store'), ['content' => $message])
             ->assertExactJson(['message' => $message]);
+    }
+
+    public function testItPreventsMessagesFromBeingCreatedWithoutContent()
+    {
+        $user = factory(User::class)->create();
+
+        $message = 'a message';
+        $this->actingAs($user)
+            ->postJson(route('messages.store'))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
