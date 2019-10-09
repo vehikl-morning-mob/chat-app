@@ -25,4 +25,14 @@ class MessagesControllerTest extends TestCase
             ->assertSuccessful()
             ->assertExactJson($expectedMessages);
     }
+
+    public function testItAllowsUserToPostAMessage()
+    {
+        $user = factory(User::class)->create();
+
+        $message = 'a message';
+        $this->actingAs($user)
+            ->postJson(route('messages.store'), ['message' => $message])
+            ->assertExactJson(['message' => $message]);
+    }
 }

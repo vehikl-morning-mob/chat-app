@@ -12,4 +12,13 @@ class MessagesController extends Controller
     {
         return response(["messages" => Message::query()->pluck('content')], 200);
     }
+
+    public function store(Request $request): Response
+    {
+        Message::query()->create([
+            'content' => $request->input('message'),
+        ]);
+
+        return response(["message" => $request->input('message')], 201);
+    }
 }
