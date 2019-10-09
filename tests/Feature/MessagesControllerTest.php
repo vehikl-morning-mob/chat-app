@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\User;
 use App\Message;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,15 +16,22 @@ class MessagesControllerTest extends TestCase
 
     public function testItAllowsUserToGetAllExistingMessages()
     {
-        $existingMessages = factory(Message::class, 5)->create();
+        [$firstMessage, $secondMessage] = factory(Message::class, 2)->create();
 
-        $expectedMessages = [
-            'messages' => $existingMessages->pluck('content')->toArray(),
+        $expectedResponse = [
+            [
+                'user' => $firstMessage->user->name,
+                'message' => $firstMessage->content,
+            ],
+            [
+                'user' => $secondMessage->user->name,
+                'message' => $secondMessage->content,
+            ],
         ];
 
         $this->getJson(route('messages.index'))
             ->assertSuccessful()
-            ->assertExactJson($expectedMessages);
+            ->assertExactJson($expectedResponse);
     }
 
     public function testItAllowsUserToPostAMessage()
