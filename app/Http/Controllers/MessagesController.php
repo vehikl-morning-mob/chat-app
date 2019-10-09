@@ -22,10 +22,7 @@ class MessagesController extends Controller
 
     public function store(Request $request): Response
     {
-        Message::query()->create([
-            'content' => $request->input('message'),
-            'user_id' => $request->user()->id,
-        ]);
+        $request->user()->messages()->create(['content' => $request->input('message')]);
 
         return response(["message" => $request->input('message')], 201);
     }
