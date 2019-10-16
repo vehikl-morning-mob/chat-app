@@ -9,17 +9,14 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import axios from 'axios';
-
-    interface MessageResponse {
-        message: string
-    }
+    import {MessageResponse} from "../types/backend";
 
     @Component
     export default class MessageForm extends Vue {
         private input: string;
 
         private async sendMessage() {
-            await axios.post<MessageResponse>("/messages", {
+            const response = await axios.post<MessageResponse>("/messages", {
                 content: this.input
             });
         }

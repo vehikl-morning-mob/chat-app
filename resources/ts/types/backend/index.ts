@@ -4,3 +4,7 @@ export interface Message {
 }
 
 export type GetAllMessagesResponse = Message[];
+
+export interface MessageResponse {
+    message: string
+}
