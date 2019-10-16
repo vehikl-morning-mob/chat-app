@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent>
-        <input v-model="input" type="text">
+        <input v-model="messageBody" type="text">
 
         <button type="submit" @click="sendMessage">Send</button>
     </form>
@@ -13,11 +13,11 @@
 
     @Component
     export default class MessageForm extends Vue {
-        private input: string;
+        private messageBody: string = '';
 
         private async sendMessage() {
             const response = await axios.post<MessageResponse>("/messages", {
-                content: this.input
+                content: this.messageBody
             });
         }
     }
