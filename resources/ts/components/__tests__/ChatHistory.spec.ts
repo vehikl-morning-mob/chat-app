@@ -6,7 +6,7 @@ import ChatHistory from "../ChatHistory.vue";
 import {GetAllMessagesResponse} from "../../types/backend";
 
 describe('Chat History', () => {
-    it('Sends a request to get all messages on load', async () => {
+    it('Shows existing messages on load', async () => {
         const messagesResponse: GetAllMessagesResponse = [
             {
                 user: 'user1',
