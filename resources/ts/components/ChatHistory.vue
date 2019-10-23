@@ -11,6 +11,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {GetAllMessagesResponse, Message} from "../types/backend";
     import axios from "axios";
+    import {messagePollingIntervalMs} from '../settings';
 
     @Component
     export default class ChatHistory extends Vue {
@@ -18,6 +19,7 @@
 
         mounted() {
             this.loadMessages();
+            setInterval(this.loadMessages, messagePollingIntervalMs);
         }
 
         protected async loadMessages() {
@@ -27,7 +29,6 @@
             } catch (e) {
                 console.error(e)
             }
-
         }
     };
 </script>

@@ -3,7 +3,8 @@ import MockAdapter from "axios-mock-adapter";
 import * as flushPromises from 'flush-promises';
 import axios from 'axios';
 import ChatHistory from "../ChatHistory.vue";
-import {GetAllMessagesResponse} from "../../types/backend";
+import {GetAllMessagesResponse, MessageResponse} from "../../types/backend";
+import {messagePollingIntervalMs} from "../../settings";
 
 describe('Chat History', () => {
     it('Shows existing messages on load', async () => {
@@ -23,11 +24,40 @@ describe('Chat History', () => {
 
         await flushPromises();
 
-
         expect(wrapper.findAll('.card').at(0).text()).toContain(messagesResponse[0].message);
         expect(wrapper.findAll('.card').at(0).text()).toContain(messagesResponse[0].user);
         expect(wrapper.findAll('.card').at(1).text()).toContain(messagesResponse[1].message);
         expect(wrapper.findAll('.card').at(1).text()).toContain(messagesResponse[1].user);
 
-    })
+    });
+
+    jest.useFakeTimers();
+    it('polls for messages', async () => {
+        const messageOne: GetAllMessagesResponse = [
+            {
+                user: 'user1',
+                message: 'message1',
+            },
+        ];
+        const messageTwo: GetAllMessagesResponse = [...messageOne, {
+            user: 'user2',
+            message: 'message2',
+        }];
+
+        const mockAdapter = new MockAdapter(axios);
+        mockAdapter
+            .onGet('/messages').replyOnce(200, messageOne)
+            .onGet('/messages').replyOnce(200, messageTwo);
+
+        const wrapper = mount(ChatHistory);
+
+        await flushPromises();
+        expect(wrapper.text()).toContain(messageOne[0].message);
+        expect(wrapper.text()).not.toContain(messageTwo[1].message);
+
+        jest.advanceTimersByTime(messagePollingIntervalMs);
+        await flushPromises();
+
+        expect(wrapper.text()).toContain(messageTwo[1].message);
+    });
 });
