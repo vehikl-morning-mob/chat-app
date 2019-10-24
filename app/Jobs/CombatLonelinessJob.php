@@ -41,6 +41,6 @@ class CombatLonelinessJob implements ShouldQueue
         $output = Artisan::output();
         factory(Message::class)->create(["user_id" => $this->user->id, "content" => $output]);
         CombatLonelinessJob::dispatch($this->user)
-            ->delay(random_int(2, 5));
+            ->delay(random_int(9, 15));
     }
 }
