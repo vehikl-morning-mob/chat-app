@@ -1,6 +1,6 @@
 import {shallowMount} from "@vue/test-utils";
 import MockAdapter from "axios-mock-adapter";
-import * as flushPromises from 'flush-promises';
+import flushPromises from 'flush-promises';
 import axios from 'axios';
 import MessageForm from "../MessageForm.vue";
 import {MessageResponse} from "../../types/backend";

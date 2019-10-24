@@ -2,7 +2,7 @@ import {mount, Wrapper} from "@vue/test-utils";
 import RegisterForm from "../RegisterForm.vue";
 import {UserRegistrationPayload} from "../../types";
 import MockAdapter from "axios-mock-adapter";
-import * as flushPromises from 'flush-promises';
+import flushPromises from 'flush-promises';
 import axios from 'axios';
 
 describe('RegisterForm', () => {

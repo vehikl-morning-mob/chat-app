@@ -1,12 +1,20 @@
-import {mount} from "@vue/test-utils";
+import {mount, Wrapper} from "@vue/test-utils";
 import MockAdapter from "axios-mock-adapter";
-import * as flushPromises from 'flush-promises';
+import flushPromises from 'flush-promises';
 import axios from 'axios';
 import ChatHistory from "../ChatHistory.vue";
 import {GetAllMessagesResponse, MessageResponse} from "../../types/backend";
 import {messagePollingIntervalMs} from "../../settings";
 
+jest.useFakeTimers();
+
 describe('Chat History', () => {
+    let wrapper: Wrapper<ChatHistory>;
+
+    afterEach(() => {
+        wrapper.destroy();
+    });
+
     it('Shows existing messages on load', async () => {
         const messagesResponse: GetAllMessagesResponse = [
             {
@@ -20,7 +28,7 @@ describe('Chat History', () => {
         ];
         const mockAdapter = new MockAdapter(axios);
         mockAdapter.onGet('/messages').reply(200, messagesResponse);
-        const wrapper = mount(ChatHistory);
+        wrapper = mount(ChatHistory, {propsData: {name: 'test1'}});
 
         await flushPromises();
 
@@ -28,10 +36,9 @@ describe('Chat History', () => {
         expect(wrapper.findAll('.card').at(0).text()).toContain(messagesResponse[0].user);
         expect(wrapper.findAll('.card').at(1).text()).toContain(messagesResponse[1].message);
         expect(wrapper.findAll('.card').at(1).text()).toContain(messagesResponse[1].user);
-
+        mockAdapter.restore();
     });
 
-    jest.useFakeTimers();
     it('polls for messages', async () => {
         const messageOne: GetAllMessagesResponse = [
             {
@@ -47,11 +54,13 @@ describe('Chat History', () => {
         const mockAdapter = new MockAdapter(axios);
         mockAdapter
             .onGet('/messages').replyOnce(200, messageOne)
-            .onGet('/messages').replyOnce(200, messageTwo);
+            .onGet('/messages').replyOnce(200, messageTwo)
+            .onGet('/messages').replyOnce(200, []);
 
-        const wrapper = mount(ChatHistory);
+        wrapper = mount(ChatHistory, {propsData: {name: 'test2'}});
 
         await flushPromises();
+
         expect(wrapper.text()).toContain(messageOne[0].message);
         expect(wrapper.text()).not.toContain(messageTwo[1].message);
 
@@ -59,5 +68,6 @@ describe('Chat History', () => {
         await flushPromises();
 
         expect(wrapper.text()).toContain(messageTwo[1].message);
+        mockAdapter.restore();
     });
 });
