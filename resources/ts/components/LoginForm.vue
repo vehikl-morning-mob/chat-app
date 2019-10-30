@@ -13,7 +13,7 @@
         <input id="password" placeholder="Password" v-model="user.password" type="text"
                class="border border-gray-300 mt-4 rounded p-3">
 
-        <button id="login" type="submit" @click="login"
+        <button id="login" type="submit" @click="login" :disabled="! isReadyToSubmit"
                 class="mt-6 hover:bg-green-700 bg-green-600 text-gray-300 w-1/3 mx-auto rounded-full p-1">Login
         </button>
     </form>
@@ -33,6 +33,10 @@
         protected async login(): Promise<void> {
             await axios.post<void>('/login', this.user);
             this.$router.push('chat');
+        }
+
+        protected get isReadyToSubmit(): boolean {
+            return !!this.user.email && !!this.user.password;
         }
     }
 </script>
