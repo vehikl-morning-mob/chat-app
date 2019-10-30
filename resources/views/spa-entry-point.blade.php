@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{{mix('css/app.css')}}">
 </head>
 <body>
-<div id="app">
-    <router-view></router-view>
-</div>
+    <div id="app" class="container mx-auto p-5">
+        <router-view></router-view>
+    </div>
 </body>
 </html>
