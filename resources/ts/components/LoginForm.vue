@@ -21,7 +21,7 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator"
-    import axios from 'axios';
+    import Client from "@ts/services/Client";
 
     @Component
     export default class LoginForm extends Vue {
@@ -31,8 +31,7 @@
         };
 
         protected async login(): Promise<void> {
-            await axios.post<void>('/login', this.user);
-            this.$router.push('chat');
+            await Client.login(this.user.email, this.user.password);
         }
 
         protected get isReadyToSubmit(): boolean {

@@ -5,7 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 describe('Landing Page - Feature', () => {
-    it('Allows the user to login', async () => {
+    xit('Allows the user to login', async () => {
         const wrapper: Wrapper<LandingPage> = mount(LandingPage, {
             mocks: {
                 $router: {
