@@ -16,6 +16,10 @@
         <button id="login" type="submit" @click="login" :disabled="! isReadyToSubmit"
                 class="mt-6 hover:bg-green-700 bg-green-600 text-gray-300 w-1/3 mx-auto rounded-full p-1">Login
         </button>
+
+        <div class="error-container"
+             v-text="errorMessage"
+             v-show="errorMessage"></div>
     </form>
 </template>
 
@@ -25,6 +29,7 @@
 
     @Component
     export default class LoginForm extends Vue {
+        protected errorMessage: string = '';
         protected user = {
             email: '',
             password: ''
@@ -35,7 +40,7 @@
                 await Client.login(this.user.email, this.user.password);
                 this.$emit('login');
             } catch (error) {
-
+                this.errorMessage = error;
             }
         }
 
