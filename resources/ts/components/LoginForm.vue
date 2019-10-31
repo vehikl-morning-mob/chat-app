@@ -31,7 +31,12 @@
         };
 
         protected async login(): Promise<void> {
-            await Client.login(this.user.email, this.user.password);
+            try {
+                await Client.login(this.user.email, this.user.password);
+                this.$emit('login');
+            } catch (error) {
+
+            }
         }
 
         protected get isReadyToSubmit(): boolean {

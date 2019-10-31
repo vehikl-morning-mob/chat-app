@@ -1,6 +1,7 @@
 import {shallowMount, Wrapper} from "@vue/test-utils";
 import LoginForm from "../LoginForm.vue";
 import Client from "@ts/services/Client";
+import flushPromises from "flush-promises";
 
 jest.mock('@ts/services/Client');
 
@@ -23,7 +24,7 @@ describe('LoginForm', () => {
     });
 
     it('sends correct payload when user submits', () => {
-        Client.login = jest.fn().mockResolvedValue({message: "You did it!!! Alright!"});
+        Client.login = jest.fn();
 
         const email = 'electric@boogaloo.taco';
         wrapper.find('#email-address').setValue(email);
@@ -35,7 +36,31 @@ describe('LoginForm', () => {
         expect(Client.login).toHaveBeenCalledWith(email, password);
     });
 
-    it("Displays error modal upon connection failure", () => {
+    it('emits a login event after a successful login ', async () => {
+        Client.login = jest.fn();
 
+        const email = 'electric@boogaloo.taco';
+        wrapper.find('#email-address').setValue(email);
+        const password = 'password';
+        wrapper.find('#password').setValue(password);
+
+        wrapper.find('#login').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('login')).toBeTruthy();
+    });
+
+    it('does not emit a login event after an unsuccessful login', async () => {
+        Client.login = jest.fn().mockRejectedValue({error: 'error'});
+
+        const email = 'electric@boogaloo.taco';
+        wrapper.find('#email-address').setValue(email);
+        const password = 'password';
+        wrapper.find('#password').setValue(password);
+
+        wrapper.find('#login').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('login')).toBeFalsy();
     });
 });
