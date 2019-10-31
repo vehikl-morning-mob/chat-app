@@ -5,7 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 import axios from 'axios';
 
 describe('Landing Page - Feature', () => {
-    xit('Allows the user to login', async () => {
+    it('Allows the user to login', async () => {
         const wrapper: Wrapper<LandingPage> = mount(LandingPage, {
             mocks: {
                 $router: {
@@ -19,7 +19,6 @@ describe('Landing Page - Feature', () => {
         wrapper.find('#email-address').setValue('FooBar@gmail.com');
         wrapper.find('#password').setValue('secret');
         wrapper.find('#login').trigger('click');
-
 
         await flushPromises();
 

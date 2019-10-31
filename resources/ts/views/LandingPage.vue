@@ -1,5 +1,5 @@
 <template>
-    <login-form class="mt-20"></login-form>
+    <login-form class="mt-20" @login="redirectToChat"></login-form>
 </template>
 
 <script lang="ts">
@@ -10,5 +10,8 @@
         components: {LoginForm}
     })
     export default class LandingPage extends Vue {
+        protected redirectToChat(): void {
+            this.$router.push('chat');
+        }
     };
 </script>
