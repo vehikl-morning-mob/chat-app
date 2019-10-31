@@ -4,7 +4,13 @@
         "target": "esnext",
         "sourceMap": true,
         "esModuleInterop": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "@ts/*": [
+                "resources/ts/*"
+            ]
+        }
     },
     "include": [
         "resources/ts/**/*"

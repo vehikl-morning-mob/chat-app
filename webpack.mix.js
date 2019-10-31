@@ -8,3 +8,14 @@ mix.ts('resources/ts/app.ts', 'public/js')
     .tailwind()
     .purgeCss()
     .sourceMaps();
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@ts': path.resolve(
+                __dirname,
+                'resources/ts'
+            )
+        }
+    }
+});
