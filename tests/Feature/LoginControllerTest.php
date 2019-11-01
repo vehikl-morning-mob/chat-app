@@ -14,7 +14,6 @@ class LoginControllerTest extends TestCase
 
     public function testItLogsInAUser()
     {
-        $this->withExceptionHandling();
         $user = factory(User::class)->create(
             [
                 'password' => 'foobar',
@@ -27,5 +26,24 @@ class LoginControllerTest extends TestCase
         ])->assertSuccessful();
 
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function testItProvidesErrorMessagesWhenLoginFails()
+    {
+        $user = factory(User::class)->create(
+            [
+                'password' => 'foobar',
+            ]
+        );
+
+        $this
+            ->postJson(route('login'), [
+                'email' => $user->email,
+                'password' => 'nottherightpassword',
+            ])
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJson([
+                'message' => 'The credentials provided are invalid',
+            ]);
     }
 }
