@@ -1,4 +1,5 @@
 export * from "./ILoginRequest";
+export * from "./IRequestError";
 
 export interface Message {
     user: string;
