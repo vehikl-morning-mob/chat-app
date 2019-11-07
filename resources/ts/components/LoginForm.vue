@@ -1,16 +1,18 @@
 <template>
     <form @submit.prevent
-          class="flex flex-col justify-center shadow-md mx-auto max-w-lg p-12 py-8 rounded-lg bg-gray-100">
+          class="login-form flex flex-col justify-center shadow-md mx-auto max-w-lg p-12 py-8 rounded-lg bg-gray-100">
         <label for="email-address" class="sr-only">
             Email:
         </label>
         <input id="email-address" placeholder="Email" v-model="user.email" type="text"
+               :class="{'with-errors': this.errorResponse}"
                class="border border-gray-300 rounded p-3">
 
         <label for="password" class="sr-only">
             Password:
         </label>
-        <input id="password" placeholder="Password" v-model="user.password" type="text"
+        <input id="password" placeholder="Password" v-model="user.password" type="password"
+               :class="{'with-errors': this.errorResponse}"
                class="border border-gray-300 mt-4 rounded p-3">
 
         <button id="login" type="submit" @click="login" :disabled="! isReadyToSubmit"
@@ -18,18 +20,19 @@
         </button>
 
         <div class="error-container"
-             v-text="errorMessage"
-             v-show="errorMessage"></div>
+             v-text="errorResponse"
+             v-show="errorResponse"></div>
     </form>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator"
     import Client from "@ts/services/Client";
+    import {IRequestError} from '@ts/types';
 
     @Component
     export default class LoginForm extends Vue {
-        protected errorMessage: string = '';
+        protected errorResponse?: IRequestError = null;
         protected user = {
             email: '',
             password: ''
@@ -40,7 +43,8 @@
                 await Client.login(this.user.email, this.user.password);
                 this.$emit('login');
             } catch (error) {
-                this.errorMessage = error;
+                this.errorResponse = error.response?.data;
+                setTimeout(() => this.errorResponse = null, 1000);
             }
         }
 
@@ -51,5 +55,25 @@
 </script>
 
 <style scoped>
+    .login-form {
+        --shake-intensity: 3%;
+    }
 
+    .with-errors {
+        animation: shake 200ms linear 2
+    }
+
+    @keyframes shake {
+        25% {
+            transform: translateX(calc(var(--shake-intensity) * -1));
+        }
+
+        75% {
+            transform: translateX(var(--shake-intensity));
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
 </style>
