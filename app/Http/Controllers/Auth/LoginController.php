@@ -17,6 +17,7 @@ class LoginController extends Controller
 
         return response([
             'message' => 'The credentials provided are invalid',
+            'errors' => [],
         ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 

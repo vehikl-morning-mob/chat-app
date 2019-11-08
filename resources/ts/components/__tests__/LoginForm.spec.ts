@@ -2,6 +2,7 @@ import {shallowMount, Wrapper} from "@vue/test-utils";
 import LoginForm from "../LoginForm.vue";
 import Client from "@ts/services/Client";
 import flushPromises from "flush-promises";
+import {IRequestError} from "@ts/types";
 
 jest.mock('@ts/services/Client');
 
@@ -66,8 +67,12 @@ describe('LoginForm', () => {
 
     it('displays the error message given when login is unsuccessful', async () => {
 
-        const error = 'The password provided is invalid';
-        Client.login = jest.fn().mockRejectedValue(error);
+        const error: IRequestError = {
+            message: 'The password provided is invalid',
+            errors: {}
+        };
+
+        Client.login = jest.fn().mockRejectedValue({response: {data: error}});
 
         const email = 'electric@boogaloo.taco';
         wrapper.find('#email-address').setValue(email);
@@ -77,6 +82,6 @@ describe('LoginForm', () => {
         wrapper.find('#login').trigger('click');
         await flushPromises();
 
-        expect(wrapper.find('.error-container').text()).toEqual(error);
+        expect(wrapper.find('.error-container').text()).toContain(error.message);
     });
 });

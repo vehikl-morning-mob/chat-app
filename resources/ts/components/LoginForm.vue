@@ -20,8 +20,8 @@
         </button>
 
         <div class="error-container"
-             v-text="errorResponse"
-             v-show="errorResponse"></div>
+             v-text="errorResponse.message"
+             v-if="errorResponse"/>
     </form>
 </template>
 
@@ -32,19 +32,19 @@
 
     @Component
     export default class LoginForm extends Vue {
-        protected errorResponse?: IRequestError = null;
+        protected errorResponse: IRequestError = null;
         protected user = {
             email: '',
             password: ''
         };
 
         protected async login(): Promise<void> {
+            this.errorResponse = null;
             try {
                 await Client.login(this.user.email, this.user.password);
                 this.$emit('login');
             } catch (error) {
                 this.errorResponse = error.response?.data;
-                setTimeout(() => this.errorResponse = null, 1000);
             }
         }
 
