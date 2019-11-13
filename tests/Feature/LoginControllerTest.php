@@ -43,6 +43,7 @@ class LoginControllerTest extends TestCase
             ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertExactJson([
+                'errors' => [],
                 'message' => 'The credentials provided are invalid',
             ]);
     }
