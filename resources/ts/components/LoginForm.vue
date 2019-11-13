@@ -5,15 +5,17 @@
             Email:
         </label>
         <input id="email-address" placeholder="Email" v-model="user.email" type="text"
-               :class="{'with-errors': this.errorResponse}"
+               :class="{'with-errors': errorResponse.message}"
                class="border border-gray-300 rounded p-3">
+        <div class="email-errors" v-show="emailError" v-text="emailError"/>
 
         <label for="password" class="sr-only">
             Password:
         </label>
         <input id="password" placeholder="Password" v-model="user.password" type="password"
-               :class="{'with-errors': this.errorResponse}"
+               :class="{'with-errors': errorResponse.message}"
                class="border border-gray-300 mt-4 rounded p-3">
+        <div class="password-errors" v-show="passwordError" v-text="passwordError"/>
 
         <button id="login" type="submit" @click="login" :disabled="! isReadyToSubmit"
                 class="mt-6 hover:bg-green-700 bg-green-600 text-gray-300 w-1/3 mx-auto rounded-full p-1">Login
@@ -30,16 +32,18 @@
     import Client from "@ts/services/Client";
     import {IRequestError} from '@ts/types';
 
+    const emptyErrorResponse: IRequestError = {errors: {}, message: ""};
+
     @Component
     export default class LoginForm extends Vue {
-        protected errorResponse: IRequestError = null;
+        protected errorResponse: IRequestError = emptyErrorResponse;
         protected user = {
             email: '',
             password: ''
         };
 
         protected async login(): Promise<void> {
-            this.errorResponse = null;
+            this.errorResponse = emptyErrorResponse;
             try {
                 await Client.login(this.user.email, this.user.password);
                 this.$emit('login');
@@ -50,6 +54,14 @@
 
         protected get isReadyToSubmit(): boolean {
             return !!this.user.email && !!this.user.password;
+        }
+
+        protected get passwordError(): string {
+            return this.errorResponse?.errors?.password?.[0] || '';
+        }
+
+        protected get emailError(): string {
+            return this.errorResponse?.errors?.email?.[0] || '';
         }
     }
 </script>

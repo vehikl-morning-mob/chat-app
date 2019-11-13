@@ -84,4 +84,27 @@ describe('LoginForm', () => {
 
         expect(wrapper.find('.error-container').text()).toContain(error.message);
     });
+
+    it('provides visual feedback on the field that contains validation error', async () => {
+
+        const error: IRequestError = {
+            message: 'The data provided is invalid',
+            errors: {
+                email: ['Has to be a valid email'],
+                password: ['Your password is doodoo']
+            }
+        };
+
+        Client.login = jest.fn().mockRejectedValue({response: {data: error}});
+
+        wrapper.find('#email-address').setValue('123');
+        wrapper.find('#password').setValue('321');
+
+        wrapper.find('#login').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.find('.email-errors').text()).toContain(error.errors.email[0]);
+        expect(wrapper.find('.password-errors').text()).toContain(error.errors.password[0]);
+    });
+
 });
