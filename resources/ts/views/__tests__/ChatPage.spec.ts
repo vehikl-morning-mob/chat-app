@@ -6,13 +6,13 @@ import MessageForm from '../../components/MessageForm.vue';
 
 
 describe('Chat Page - Feature', () => {
-    it('renders ChatHistory', async () => {
+    it('renders ChatHistory', () => {
         const wrapper: Wrapper<ChatPage> = mount(ChatPage);
 
         expect(wrapper.find(ChatHistory).exists()).toBeTruthy();
     });
 
-    it('renders MessageForm', async () => {
+    it('renders MessageForm', () => {
         const wrapper: Wrapper<ChatPage> = mount(ChatPage);
 
         expect(wrapper.find(MessageForm).exists()).toBeTruthy();
