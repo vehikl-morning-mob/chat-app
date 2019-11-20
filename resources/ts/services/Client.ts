@@ -11,6 +11,5 @@ export default class Client {
         console.log({loginPayload});
 
         await axios.post("/login", loginPayload);
-        console.log('I succeeded');
     }
 }

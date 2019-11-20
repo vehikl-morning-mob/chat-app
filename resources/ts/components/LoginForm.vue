@@ -46,7 +46,6 @@
             this.errorResponse = emptyErrorResponse;
             try {
                 await Client.login(this.user.email, this.user.password);
-                alert('here');
                 this.$emit('login');
             } catch (error) {
                 this.errorResponse = error.response?.data;
