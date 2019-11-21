@@ -52,7 +52,14 @@ describe('LoginForm', () => {
     });
 
     it('does not emit a login event after an unsuccessful login', async () => {
-        Client.login = jest.fn().mockRejectedValue({error: 'error'});
+        Client.login = jest.fn().mockRejectedValue({
+            response: {
+                data: {
+                    errors: {},
+                    message: ''
+                }
+            }
+        });
 
         const email = 'electric@boogaloo.taco';
         wrapper.find('#email-address').setValue(email);

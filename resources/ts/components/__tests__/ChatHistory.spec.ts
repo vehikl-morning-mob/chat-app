@@ -5,15 +5,22 @@ import axios from 'axios';
 import ChatHistory from "../ChatHistory.vue";
 import {GetAllMessagesResponse, MessageResponse} from "../../types/backend";
 import {messagePollingIntervalMs} from "../../settings";
+import MockEcho from "mock-echo"
 
 jest.useFakeTimers();
 
 describe('Chat History', () => {
     let wrapper: Wrapper<ChatHistory>;
+    let mockEcho: MockEcho;
+
+    beforeEach(() => {
+        mockEcho = new MockEcho()
+        window.Echo = mockEcho
+    });
 
     afterEach(() => {
-        wrapper.destroy();
-    });
+        delete window.Echo
+    })
 
     it('Shows existing messages on load', async () => {
         const messagesResponse: GetAllMessagesResponse = [
@@ -28,7 +35,7 @@ describe('Chat History', () => {
         ];
         const mockAdapter = new MockAdapter(axios);
         mockAdapter.onGet('/messages').reply(200, messagesResponse);
-        wrapper = mount(ChatHistory, {propsData: {name: 'test1'}});
+        wrapper = mount(ChatHistory);
 
         await flushPromises();
 
@@ -39,35 +46,17 @@ describe('Chat History', () => {
         mockAdapter.restore();
     });
 
-    it('polls for messages', async () => {
-        const messageOne: GetAllMessagesResponse = [
-            {
-                user: 'user1',
-                message: 'message1',
-            },
-        ];
-        const messageTwo: GetAllMessagesResponse = [...messageOne, {
-            user: 'user2',
-            message: 'message2',
-        }];
-
+    it('displays new messages when they are received', async () => {
+        wrapper = mount(ChatHistory);
         const mockAdapter = new MockAdapter(axios);
-        mockAdapter
-            .onGet('/messages').replyOnce(200, messageOne)
-            .onGet('/messages').replyOnce(200, messageTwo)
-            .onGet('/messages').replyOnce(200, []);
+        mockAdapter.onGet('/messages').reply(200, []);
 
-        wrapper = mount(ChatHistory, {propsData: {name: 'test2'}});
+        mockEcho.getChannel('private-room').broadcast('.App\\Events\\NewMessageReceived', {
+            user: 'user1',
+            message: 'Hello World'
+        });
 
-        await flushPromises();
-
-        expect(wrapper.text()).toContain(messageOne[0].message);
-        expect(wrapper.text()).not.toContain(messageTwo[1].message);
-
-        jest.advanceTimersByTime(messagePollingIntervalMs);
-        await flushPromises();
-
-        expect(wrapper.text()).toContain(messageTwo[1].message);
+        expect(wrapper.findAll('.card').length).toEqual(1);
         mockAdapter.restore();
     });
 });

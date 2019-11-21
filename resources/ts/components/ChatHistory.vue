@@ -8,26 +8,19 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Prop} from 'vue-property-decorator';
+    import {Component, Vue} from 'vue-property-decorator';
     import {GetAllMessagesResponse, Message} from "../types/backend";
     import axios from "axios";
-    import {messagePollingIntervalMs} from '../settings';
-
-    let startTime = (new Date()).getTime();
 
     @Component
     export default class ChatHistory extends Vue {
         protected messages: Message[] = [];
-        protected interval;
-        @Prop() name!: string;
 
-        mounted() {
+        created() {
             this.loadMessages();
-            this.interval = setInterval(this.loadMessages, messagePollingIntervalMs);
-        }
-
-        beforeDestroy() {
-            clearInterval(this.interval);
+            window.Echo.private('room').listen('.App\\Events\\NewMessageReceived', (newMessage: Message) => {
+                this.messages.unshift(newMessage);
+            });
         }
 
         protected async loadMessages() {

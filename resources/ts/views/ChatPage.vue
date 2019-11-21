@@ -14,5 +14,6 @@
         components: {MessageForm, ChatHistory}
     })
     export default class ChatPage extends Vue {
+
     };
 </script>
