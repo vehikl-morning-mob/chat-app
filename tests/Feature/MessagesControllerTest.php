@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
+use Event;
 use App\User;
 use App\Message;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use App\Events\NewMessageReceived;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -52,5 +54,20 @@ class MessagesControllerTest extends TestCase
         $this->actingAs($user)
             ->postJson(route('messages.store'))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    public function testItBroadcastsNewMessageReceivedWhenANewMessageIsCreated()
+    {
+        Event::fake();
+        $user = factory(User::class)->create();
+
+        $message = 'a message';
+        $this->actingAs($user)
+            ->postJson(route('messages.store'), ['content' => $message])
+            ->assertExactJson(['message' => $message]);
+
+        Event::assertDispatched(NewMessageReceived::class, function ($event) use ($message, $user) {
+            return $event->message === $message;
+        });
     }
 }

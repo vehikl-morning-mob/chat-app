@@ -18,7 +18,7 @@
 
         created() {
             this.loadMessages();
-            window.Echo.private('room').listen('.App\\Events\\NewMessageReceived', (newMessage: Message) => {
+            window.Echo.channel('room').listen('.App\\Events\\NewMessageReceived', (newMessage: Message) => {
                 this.messages.unshift(newMessage);
             });
         }

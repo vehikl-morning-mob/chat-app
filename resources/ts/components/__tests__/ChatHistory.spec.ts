@@ -51,7 +51,7 @@ describe('Chat History', () => {
         const mockAdapter = new MockAdapter(axios);
         mockAdapter.onGet('/messages').reply(200, []);
 
-        mockEcho.getChannel('private-room').broadcast('.App\\Events\\NewMessageReceived', {
+        mockEcho.getChannel('room').broadcast('.App\\Events\\NewMessageReceived', {
             user: 'user1',
             message: 'Hello World'
         });
