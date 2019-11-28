@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class LoginControllerTest extends TestCase
+class WebAuthController extends TestCase
 {
     use RefreshDatabase;
 
