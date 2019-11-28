@@ -47,4 +47,16 @@ class WebAuthController extends TestCase
                 'message' => 'The credentials provided are invalid',
             ]);
     }
+
+    public function testAnAuthenticatedUserCanLogout()
+    {
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user);
+
+        $this->postJson(route('logout'))
+            ->assertSuccessful();
+
+        $this->assertFalse(auth()->check());
+    }
 }

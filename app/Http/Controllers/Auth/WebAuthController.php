@@ -21,8 +21,8 @@ class WebAuthController extends Controller
         ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function __construct()
+    public function logout()
     {
-        $this->middleware('guest')->except('logout');
+        auth()->logout();
     }
 }
