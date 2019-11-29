@@ -24,6 +24,11 @@ class ApiAuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function refresh()
+    {
+        return $this->respondWithToken(auth('api')->refresh());
+    }
+
     private function respondWithToken(string $token): JsonResponse
     {
         return response()->json([
@@ -32,4 +37,5 @@ class ApiAuthController extends Controller
             'expires_in' => auth('api')->factory()->getTTL() * 60,
         ]);
     }
+
 }

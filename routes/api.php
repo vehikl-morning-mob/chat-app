@@ -18,6 +18,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('api')->prefix('auth')->group(function (Router $router) {
+Route::middleware('api')->prefix('auth')->group(function () {
     Route::post('login', 'ApiAuthController@login')->name('api.login');
+    Route::post('refresh', 'ApiAuthController@refresh')->middleware('auth:api')->name('api.refresh');
 });
+
+// Soft deletes
+// "deleted_at"
+//  2019-08-20 12:12:34
+
+// RESTful API
+// GET - Retreive information
+// PUT/PATCH - Modify existing information
+// DELETE - Remove
+// POST - Insert new information
+
