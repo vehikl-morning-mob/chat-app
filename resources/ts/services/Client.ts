@@ -8,8 +8,6 @@ export default class Client {
             password,
         };
 
-        console.log({loginPayload});
-
         await axios.post("/login", loginPayload);
     }
 }
