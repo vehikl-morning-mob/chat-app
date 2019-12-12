@@ -66,6 +66,18 @@ class MessagesControllerTest extends TestCase
             ->assertExactJson(['message' => $message]);
     }
 
+    public function testItAllowsUserToPostAMessageViaPublicApi()
+    {
+        $user = factory(User::class)->create();
+
+        $message = 'a message';
+        $this->actingAs($user)
+            ->postJson(route('api.messages.store'), ['content' => $message])
+            ->assertExactJson(['message' => $message]);
+
+        $this->assertNotEmpty(Message::query()->where('content', $message));
+    }
+
     public function testItPreventsMessagesFromBeingCreatedWithoutContent()
     {
         $user = factory(User::class)->create();
