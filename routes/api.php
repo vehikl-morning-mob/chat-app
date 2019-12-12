@@ -23,7 +23,7 @@ Route::middleware('api')->prefix('auth')->group(function () {
     Route::post('refresh', 'ApiAuthController@refresh')->middleware('auth:api')->name('api.refresh');
 });
 
-Route::middleware('api')->group(function () {
+Route::middleware(['api', 'auth:api'])->group(function () {
     Route::get('messages', 'MessagesController@index')->name('api.messages.index');
     Route::post('messages', 'MessagesController@store')->name('api.messages.store');
 });
