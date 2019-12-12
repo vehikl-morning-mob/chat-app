@@ -23,6 +23,10 @@ Route::middleware('api')->prefix('auth')->group(function () {
     Route::post('refresh', 'ApiAuthController@refresh')->middleware('auth:api')->name('api.refresh');
 });
 
+Route::middleware('api')->group(function () {
+    Route::get('messages', 'MessagesController@index')->name('api.messages.index');
+});
+
 // Soft deletes
 // "deleted_at"
 //  2019-08-20 12:12:34

@@ -36,6 +36,26 @@ class MessagesControllerTest extends TestCase
             ->assertExactJson($expectedResponse);
     }
 
+    public function testItAllowsUserToGetAllExistingMessagesViaPublicApi()
+    {
+        [$firstMessage, $secondMessage] = factory(Message::class, 2)->create();
+
+        $expectedResponse = [
+            [
+                'user' => $firstMessage->user->name,
+                'message' => $firstMessage->content,
+            ],
+            [
+                'user' => $secondMessage->user->name,
+                'message' => $secondMessage->content,
+            ],
+        ];
+
+        $this->getJson(route('api.messages.index'))
+            ->assertSuccessful()
+            ->assertExactJson($expectedResponse);
+    }
+
     public function testItAllowsUserToPostAMessage()
     {
         $user = factory(User::class)->create();
@@ -70,4 +90,6 @@ class MessagesControllerTest extends TestCase
             return $event->message === $message;
         });
     }
+
+
 }
