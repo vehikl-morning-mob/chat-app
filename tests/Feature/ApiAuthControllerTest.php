@@ -44,4 +44,16 @@ class ApiAuthControllerTest extends TestCase
         $tokenThatWeGotBack = $response->json('access_token');
         $this->assertNotEquals($tokenThatWeGotBack, $oldToken);
     }
+
+    public function testItRespondsWith401WhenTokenIsExpired()
+    {
+        Carbon::setTestNow();
+        $user = factory(User::class)->create();  // Creating fake user
+        $oldToken = auth('api')->login($user);  // Pretend that user has already logged in
+
+        Carbon::setTestNow(now()->addHours(2));
+
+        $response = $this->getJson(route('api.messages.index'),
+            ['Authorization' => "bearer $oldToken"])->assertStatus(401);
+    }
 }
