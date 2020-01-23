@@ -51,7 +51,9 @@ class MessagesControllerTest extends TestCase
             ],
         ];
 
-        $this->getJson(route('api.messages.index'))
+        $token = auth('api')->login($firstMessage->user);
+
+        $this->getJson(route('api.messages.index'), ['Authorization' => "bearer $token"])
             ->assertSuccessful()
             ->assertExactJson($expectedResponse);
     }
@@ -69,10 +71,10 @@ class MessagesControllerTest extends TestCase
     public function testItAllowsUserToPostAMessageViaPublicApi()
     {
         $user = factory(User::class)->create();
+        $token = auth('api')->login($user);  // Pretend that user has already logged in
 
         $message = 'a message';
-        $this->actingAs($user)
-            ->postJson(route('api.messages.store'), ['content' => $message])
+        $this->postJson(route('api.messages.store'), ['content' => $message, 'Authorization' => "bearer $token"])
             ->assertExactJson(['message' => $message]);
 
         $this->assertNotEmpty(Message::query()->where('content', $message));
