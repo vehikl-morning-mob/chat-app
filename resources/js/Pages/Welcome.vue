@@ -2,13 +2,9 @@
     <main class="h-screen pb-10 flex flex-col justify-between">
         <section class="flex flex-col mx-8 my-2">
             <ul class="flex flex-col">
-                <li class="chat-bubble">Hey Bob, are you busy tonight?</li>
-                <li class="chat-bubble self-end">No, not really... Just rewatching game of thrones</li>
-                <li class="chat-bubble self-end">Man... the writing is really going down hill since Danny got to
-                    Westeros.
+                <li v-for="message in messages" class="chat-bubble">
+                    {{ message.owner_name }} said at {{ message.time }}: {{ message.content }}
                 </li>
-                <li class="chat-bubble">You said it, man.</li>
-                <li class="chat-bubble">Yack... Season 8 sucks.</li>
             </ul>
         </section>
         <section>
@@ -22,12 +18,15 @@
     </main>
 </template>
 
-<script>
-import {Head} from '@inertiajs/inertia-vue3';
+<script setup>
+import {ref} from "vue";
 
-export default {
-    components: {
-        Head
-    }
-}
+const messages = ref([
+    {owner_name: "Bob", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"},
+    {owner_name: "Kevin", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"},
+    {owner_name: "Bob", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"},
+    {owner_name: "Kevin", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"},
+    {owner_name: "Bob", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"},
+    {owner_name: "Kevin", content: " No, not really... Just rewatching game of thrones", time: "9:06pm"}
+]);
 </script>
