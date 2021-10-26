@@ -1,3 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.chat-bubble {
+    @apply bg-blue-200 border border-blue-800 px-5 py-3 my-4 w-3/4 rounded-2xl;
+}
