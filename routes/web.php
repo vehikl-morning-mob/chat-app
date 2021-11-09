@@ -20,13 +20,19 @@ Route::get('/', function () {
         "messages" => [
             [
                 "content" => 'Hello',
-                "username" => 'Bob',
+                "username" => 'Unknown',
                 "time" => '9:00pm'],
             [
                 "content" => 'Hi there',
                 "username" => 'Kevin',
                 "time" => '9:01pm'
-            ],]
+            ],
+            [
+                "content" => 'Hey',
+                "username" => 'Kevin',
+                "time" => '9:01pm'
+            ],
+        ]
     ]);
 });
 

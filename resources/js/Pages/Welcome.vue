@@ -3,7 +3,11 @@
         <section class="flex flex-col mx-8 my-2">
             <ul class="flex flex-col">
                 <li v-for="message in messages"
-                    :class="{'chat-bubble': true, 'owner-message': message.username === currentUser.username, 'other-message': message.username !== currentUser.username}">
+                    :class="{
+                    'chat-bubble': true,
+                    'owner-message': message.username === currentUser.username,
+                    'other-message': message.username !== currentUser.username
+                }">
                     {{ message.username }} said at {{ message.time }}: {{ message.content }}
                 </li>
             </ul>
