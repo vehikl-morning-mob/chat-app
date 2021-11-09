@@ -3,6 +3,6 @@
         "level": "SEVERE",
         "message": "http:\/\/localhost:8080\/js\/bundle.js - Failed to load resource: net::ERR_CONNECTION_REFUSED",
         "source": "network",
-        "timestamp": 1636418262911
+        "timestamp": 1636418784418
     }
 ]
