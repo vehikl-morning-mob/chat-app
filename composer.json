@@ -49,6 +49,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "serve-for-dusk": [
+            "APP_ENV=dusk bash -c 'php artisan serve'"
         ]
     },
     "extra": {
