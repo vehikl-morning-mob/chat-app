@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -14,15 +15,14 @@ class ChatTest extends DuskTestCase
         Carbon::setTestNow();
 
         $creationTime = now();
-        $message = Message::factory()->create([
-            'created_at' => $creationTime
-        ]);
-        // Make a few fake messages
+        $user = User::factory()->has(Message::factory())->create();
+        $message = $user->messages()->first();
 
         $this->browse(fn(Browser $browser) => $browser
             ->visit('/')
             ->assertSee($message->content)
             ->assertSee($creationTime->diffForHumans())
+            //->assertSee($message->user->name)
         );
     }
 }

@@ -18,6 +18,12 @@ class Message extends Model
         return "unknown";
     }
 
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getTimeAttribute()
     {
         return $this->created_at->diffForHumans();
