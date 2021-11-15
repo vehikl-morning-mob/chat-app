@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Message;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,5 +43,13 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post(uri: '/messages', action: function (Request $request) {
+    auth()->user()->messages()->create([
+        'content' => $request->input('content')
+    ]);
+
+})->name('messages.store');
+
 
 require __DIR__ . '/auth.php';

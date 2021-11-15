@@ -11,6 +11,8 @@ class Message extends Model
 
     protected $appends = ['username', 'time'];
 
+    protected $fillable = ['content'];
+
     public function getUsernameAttribute()
     {
         return "unknown";
