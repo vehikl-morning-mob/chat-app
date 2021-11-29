@@ -17,7 +17,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        "currentUser" => ["username" => 'Bob'],
+        "currentUser" => ["username" => 'Kevin'],
         "messages" => [
             [
                 "content" => 'Hello',
