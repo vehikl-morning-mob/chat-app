@@ -15,7 +15,7 @@ class Message extends Model
 
     public function getUsernameAttribute()
     {
-        return "unknown";
+        return $this->user->name;
     }
 
 

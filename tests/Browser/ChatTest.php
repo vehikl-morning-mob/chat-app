@@ -22,7 +22,7 @@ class ChatTest extends DuskTestCase
             ->visit('/')
             ->assertSee($message->content)
             ->assertSee($creationTime->diffForHumans())
-            //->assertSee($message->user->name)
+            ->assertSee($message->user->name)
         );
     }
 }

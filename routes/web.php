@@ -31,7 +31,6 @@ Route::post(uri: '/messages', action: function (Request $request) {
     auth()->user()->messages()->create([
         'content' => $request->input('content')
     ]);
-
 })->name('messages.store');
 
 
