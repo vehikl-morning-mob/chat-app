@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,24 +19,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         "currentUser" => ["username" => 'Kevin'],
-        "messages" => [
-            [
-                "content" => 'Hello',
-                "username" => 'Unknown',
-                "time" => '9:00pm'
-            ],
-            [
-                "content" => 'Hi there',
-                "username" => 'Kevin',
-                "time" => '9:01pm'
-            ],
-            [
-                "content" => 'Hey',
-                "username" => 'Kevin',
-                "time" => '9:01pm'
-            ],
-        ]
-//        "messages" => Message::all()
+        "messages" => Message::all()
     ]);
 });
 
