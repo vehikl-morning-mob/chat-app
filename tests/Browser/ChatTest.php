@@ -25,4 +25,19 @@ class ChatTest extends DuskTestCase
             ->assertSee($message->user->name)
         );
     }
+
+
+    public function test_it_shows_the_author_of_the_message_name()
+    {
+        $user = User::factory()->create();
+
+        $this->browse(fn(Browser $browser) => $browser
+            ->visit('/')
+            ->type('name', "Bob")
+            ->type('message', "Hello world!")
+            ->click('@submit-button')
+
+
+        );
+    }
 }
